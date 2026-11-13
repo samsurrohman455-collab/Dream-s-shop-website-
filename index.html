@@ -1,5 +1,4 @@
-
-
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
@@ -87,13 +86,21 @@ section{padding:55px 0}
 .heading h2{font-size:30px;margin-bottom:9px}
 .heading p{color:#78847d}
 .filters{
-display:flex;gap:12px;margin-bottom:25px
+display:flex;gap:12px;margin-bottom:25px;flex-wrap:wrap;
 }
 .filters input,.filters select{
-width:100%;padding:14px;
+flex:1;min-width:200px;padding:14px;
 border:1px solid #e2e9e4;border-radius:12px;
 background:white;outline:none
 }
+.admin-add-product-bar{
+margin-bottom:20px;text-align:right;
+}
+.add-prod-btn{
+background:var(--green);color:white;
+padding:10px 20px;border-radius:10px;font-weight:bold;
+}
+
 .products{
 display:grid;
 grid-template-columns:repeat(3,minmax(0,1fr));
@@ -102,7 +109,7 @@ gap:22px
 .product{
 background:white;border-radius:17px;
 overflow:hidden;border:1px solid #e9eee9;
-transition:.25s
+transition:.25s;position:relative;
 }
 .product:hover{
 transform:translateY(-6px);
@@ -120,7 +127,6 @@ width:100%;height:100%;
 object-fit:cover;
 display:block;
 }
-/* Admin Upload Overlay */
 .admin-upload-badge{
 position:absolute;
 bottom:10px;
@@ -145,10 +151,27 @@ opacity:0.9;
 .tag{color:var(--green);font-size:13px;font-weight:bold}
 .info h3{margin:8px 0}
 .info p{color:#78847d;font-size:14px}
+.price-row{
+display:flex;justify-content:space-between;
+align-items:center;margin:12px 0;
+}
 .price{
 color:var(--green)!important;
 font-size:21px!important;
-font-weight:900;margin:12px 0
+font-weight:900;
+}
+.admin-actions{
+display:flex;gap:6px;
+}
+.admin-edit-btn{
+background:#e2e9e4;color:#18231e;
+padding:5px 10px;font-size:12px;
+border-radius:6px;font-weight:bold;
+}
+.admin-del-btn{
+background:#ffebee;color:#c22;
+padding:5px 10px;font-size:12px;
+border-radius:6px;font-weight:bold;
 }
 .add{
 width:100%;padding:12px;
@@ -180,7 +203,6 @@ padding:14px 0;border-bottom:1px solid #eee
 background:#e8f3ec;padding:6px 11px;
 border-radius:7px;color:var(--green)
 }
-.remove{color:#c22;background:#fff0f0!important}
 .total{font-size:22px;font-weight:900;color:var(--green)}
 .cart-bottom{
 display:flex;justify-content:space-between;
@@ -202,23 +224,13 @@ text-align:center;border-radius:20px;padding:40px 20px
 /* Footer */
 footer{
 background:#0b1511;color:#c8d4cd;
-padding:28px 10px;text-align:center;margin-top:45px
+padding:28px 10px;text-align:center;margin-top:45px;
+position:relative;
 }
 footer strong{color:var(--gold)}
-.admin-btn{
-margin-top:15px;
-background:transparent;
-border:1px solid #35473f;
-color:#9cb0a5;
-padding:6px 14px;
-border-radius:20px;
-font-size:12px;
-}
-.admin-btn.active{
-background:var(--gold);
-color:#101b17;
-border-color:var(--gold);
-font-weight:bold;
+.secret-trigger{
+position:absolute;bottom:5px;right:5px;
+width:20px;height:20px;cursor:pointer;opacity:0.01;
 }
 
 @media(max-width:750px){
@@ -295,6 +307,11 @@ Dream S Shop থেকে আপনার প্রয়োজনীয় পণ্�
 <p>আপনার পছন্দের পণ্যটি খুঁজে নিন</p>
 </div>
 
+<!-- অ্যাডমিন মোডে নতুন পণ্য যোগ করার অপশন -->
+<div id="adminAddBar" class="admin-add-product-bar" style="display:none;">
+<button class="add-prod-btn" onclick="addNewProduct()">+ নতুন পণ্য যোগ করুন</button>
+</div>
+
 <div class="filters">
 <input id="search" placeholder="🔍 পণ্য খুঁজুন...">
 <select id="category">
@@ -346,87 +363,95 @@ WhatsApp Message
 
 </main>
 
-<!-- ছবি আপলোডের গোপন ইনপুট -->
 <input type="file" id="photoUploader" accept="image/*" hidden>
 
 <footer>
 <strong>DREAM S SHOP</strong>
 <p>© <span id="year"></span> All Rights Reserved.</p>
 <p>আপনার বিশ্বস্ত অনলাইন শপ</p>
-<button id="adminToggle" class="admin-btn" onclick="toggleAdmin()">🔒 Admin Login</button>
+<!-- গোপন ট্রিগার: এখানে ৩ বার ট্যাপ করলে পাসওয়ার্ড চাইবে -->
+<div class="secret-trigger" onclick="secretAdminLogin()"></div>
 </footer>
 
 <script>
-const ADMIN_PASS = "1234"; // অ্যাডমিন পাসওয়ার্ড
+const ADMIN_PASS = "1234"; // আপনার অ্যাডমিন পাসওয়ার্ড
 let isAdmin = localStorage.getItem("dream_shop_admin") === "true";
 let currentUploadId = null;
 
 let savedImages = JSON.parse(localStorage.getItem("dream_shop_images") || "{}");
 
-const products=[
+let defaultProducts = [
 {
-id:1,
-name:"কটন টি-শার্ট",
-price:650,
-category:"পোশাক",
-description:"আরামদায়ক কটন টি-শার্ট",
-image:"tshirt.jpg"
+id: 1,
+name: "কটন টি-শার্ট",
+price: 650,
+category: "পোশাক",
+description: "আরামদায়ক কটন টি-শার্ট",
+image: "tshirt.jpg"
 },
 {
-id:2,
-name:"স্টাইলিশ ব্যাগ",
-price:1200,
-category:"অ্যাক্সেসরিজ",
-description:"প্রতিদিন ব্যবহারের সুন্দর ব্যাগ",
-image:"bag.jpg"
+id: 2,
+name: "স্টাইলিশ ব্যাগ",
+price: 1200,
+category: "অ্যাক্সেসরিজ",
+description: "প্রতিদিন ব্যবহারের সুন্দর ব্যাগ",
+image: "bag.jpg"
 },
 {
-id:3,
-name:"পানির বোতল",
-price:450,
-category:"ঘর ও জীবনযাপন",
-description:"সহজে বহনযোগ্য বোতল",
-image:"bottle.jpg"
+id: 3,
+name: "পানির বোতল",
+price: 450,
+category: "ঘর ও জীবনযাপন",
+description: "সহজে বহনযোগ্য বোতল",
+image: "bottle.jpg"
 }
 ];
 
-const WHATSAPP="8801750538990";
-let cart=[];
+// লোকালস্টোরেজ থেকে কাস্টম প্রোডাক্ট ও আপডেট ডাটা লোড করা
+let products = JSON.parse(localStorage.getItem("dream_shop_products") || JSON.stringify(defaultProducts));
 
-const list=document.getElementById("productList");
-const search=document.getElementById("search");
-const category=document.getElementById("category");
-const photoUploader=document.getElementById("photoUploader");
-const adminToggle=document.getElementById("adminToggle");
+const WHATSAPP = "8801750538990";
+let cart = [];
 
-function updateAdminUI(){
-if(isAdmin){
-adminToggle.textContent = "🔓 Admin Mode (চালু আছে)";
-adminToggle.classList.add("active");
-} else {
-adminToggle.textContent = "🔒 Admin Login";
-adminToggle.classList.remove("active");
+const list = document.getElementById("productList");
+const search = document.getElementById("search");
+const category = document.getElementById("category");
+const photoUploader = document.getElementById("photoUploader");
+const adminAddBar = document.getElementById("adminAddBar");
+
+// কিবোর্ডে Ctrl + Shift + A চাপলেও অ্যাডমিন প্যানেল আসবে
+window.addEventListener("keydown", function(e){
+if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a"){
+e.preventDefault();
+secretAdminLogin();
 }
-renderProducts();
-}
+});
 
-function toggleAdmin(){
+function secretAdminLogin(){
 if(isAdmin){
+if(confirm("অ্যাডমিন মোড বন্ধ করতে চান?")){
 isAdmin = false;
 localStorage.setItem("dream_shop_admin", "false");
-alert("Admin Mode বন্ধ করা হয়েছে।");
-updateAdminUI();
+alert("অ্যাডমিন মোড বন্ধ করা হয়েছে।");
+updateAdminState();
+}
 } else {
-let pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন (1234):");
+let pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
 if(pass === ADMIN_PASS){
 isAdmin = true;
 localStorage.setItem("dream_shop_admin", "true");
-alert("স্বাগতম! এখন পণ্যের ছবিতে ক্লিক করে ছবি আপলোড করতে পারবেন।");
-updateAdminUI();
+alert("সফলভাবে অ্যাডমিন মোড চালু হয়েছে!");
+updateAdminState();
 } else if(pass !== null){
 alert("ভুল পাসওয়ার্ড!");
 }
 }
+}
+
+function updateAdminState(){
+adminAddBar.style.display = isAdmin ? "block" : "none";
+renderProducts();
+updateCategories();
 }
 
 function triggerUpload(id){
@@ -462,31 +487,89 @@ img.src = event.target.result;
 reader.readAsDataURL(file);
 });
 
+function editProduct(id){
+let p = products.find(x => x.id === id);
+let newName = prompt("পণ্যের নতুন নাম:", p.name);
+if(newName === null) return;
+let newPrice = prompt("পণ্যের নতুন দাম:", p.price);
+if(newPrice === null || isNaN(newPrice)) return;
+let newDesc = prompt("পণ্যের বিবরণ:", p.description);
+if(newDesc === null) return;
+
+p.name = newName.trim();
+p.price = Number(newPrice);
+p.description = newDesc.trim();
+
+localStorage.setItem("dream_shop_products", JSON.stringify(products));
+renderProducts();
+updateCategories();
+alert("পণ্য সফলভাবে আপডেট করা হয়েছে!");
+}
+
+function addNewProduct(){
+let name = prompt("নতুন পণ্যের নাম:");
+if(!name) return;
+let price = prompt("পণ্যের দাম:");
+if(!price || isNaN(price)) return;
+let cat = prompt("ক্যাটাগরি (যেমন: পোশাক, অ্যাক্সেসরিজ):", "সাধারণ");
+if(!cat) return;
+let desc = prompt("পণ্যের বিবরণ:", "নতুন পণ্য");
+
+let newP = {
+id: Date.now(),
+name: name.trim(),
+price: Number(price),
+category: cat.trim(),
+description: desc ? desc.trim() : "",
+image: ""
+};
+
+products.push(newP);
+localStorage.setItem("dream_shop_products", JSON.stringify(products));
+renderProducts();
+updateCategories();
+alert("নতুন পণ্য যোগ করা হয়েছে! এখন ছবিতে ক্লিক করে ছবি আপলোড করে নিন।");
+}
+
+function deleteProduct(id){
+if(confirm("আপনি কি এই পণ্যটি মুছে ফেলতে চান?")){
+products = products.filter(x => x.id !== id);
+localStorage.setItem("dream_shop_products", JSON.stringify(products));
+renderProducts();
+updateCategories();
+}
+}
+
 function taka(n){
 return Number(n).toLocaleString("bn-BD");
 }
 
-function renderProducts(){
-let term=search.value.toLowerCase();
-let selected=category.value;
+function updateCategories(){
+let cats = ["সব", ...new Set(products.map(p => p.category))];
+category.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join("");
+}
 
-let filtered=products.filter(p=>
-(p.name.toLowerCase().includes(term)||
-p.description.toLowerCase().includes(term))&&
-(selected==="সব"||p.category===selected)
+function renderProducts(){
+let term = search.value.toLowerCase();
+let selected = category.value;
+
+let filtered = products.filter(p =>
+(p.name.toLowerCase().includes(term) ||
+p.description.toLowerCase().includes(term)) &&
+(selected === "সব" || p.category === selected)
 );
 
-document.getElementById("empty").hidden=filtered.length>0;
+document.getElementById("empty").hidden = filtered.length > 0;
 
-list.innerHTML=filtered.map(p=>{
+list.innerHTML = filtered.map(p => {
 let imgSrc = savedImages[p.id] ? savedImages[p.id] : p.image;
-let placeholderText = isAdmin ? "📷 ছবি আপলোড করতে ক্লিক করুন" : "Upload Product Photo";
+let placeholderText = isAdmin ? "📷 ছবি আপলোড করুন" : "Upload Product Photo";
 let fallbackSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e9efeb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23667085%22 font-size=%2222%22%3E${encodeURIComponent(placeholderText)}%3C/text%3E%3C/svg%3E`;
 
 return `
 <div class="product">
 <div class="img-wrap ${isAdmin ? 'admin-active' : ''}" onclick="triggerUpload(${p.id})">
-<img src="${imgSrc}" alt="${p.name}"
+<img src="${imgSrc || fallbackSvg}" alt="${p.name}"
 onerror="this.onerror=null;this.src='${fallbackSvg}'">
 ${isAdmin ? '<span class="admin-upload-badge">📷 ছবি পরিবর্তন</span>' : ''}
 </div>
@@ -494,7 +577,15 @@ ${isAdmin ? '<span class="admin-upload-badge">📷 ছবি পরিবর্�
 <span class="tag">${p.category}</span>
 <h3>${p.name}</h3>
 <p>${p.description}</p>
-<p class="price">৳${taka(p.price)}</p>
+<div class="price-row">
+<span class="price">৳${taka(p.price)}</span>
+${isAdmin ? `
+<div class="admin-actions">
+<button class="admin-edit-btn" onclick="editProduct(${p.id})">এডিট</button>
+<button class="admin-del-btn" onclick="deleteProduct(${p.id})">ডিলিট</button>
+</div>
+` : ''}
+</div>
 <button class="add" onclick="add(${p.id})">
 কার্টে যোগ করুন +
 </button>
@@ -505,34 +596,34 @@ ${isAdmin ? '<span class="admin-upload-badge">📷 ছবি পরিবর্�
 }
 
 function add(id){
-let p=products.find(x=>x.id===id);
-let item=cart.find(x=>x.id===id);
-if(item)item.qty++;
-else cart.push({...p,qty:1});
+let p = products.find(x => x.id === id);
+let item = cart.find(x => x.id === id);
+if(item) item.qty++;
+else cart.push({...p, qty: 1});
 renderCart();
 }
 
-function change(id,n){
-let item=cart.find(x=>x.id===id);
-if(!item)return;
-item.qty+=n;
-if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+function change(id, n){
+let item = cart.find(x => x.id === id);
+if(!item) return;
+item.qty += n;
+if(item.qty <= 0) cart = cart.filter(x => x.id !== id);
 renderCart();
 }
 
 function renderCart(){
-let count=cart.reduce((s,x)=>s+x.qty,0);
-let total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+let count = cart.reduce((s, x) => s + x.qty, 0);
+let total = cart.reduce((s, x) => s + x.price * x.qty, 0);
 
-document.getElementById("count").textContent=taka(count);
-document.getElementById("total").textContent="মোট: ৳"+taka(total);
+document.getElementById("count").textContent = taka(count);
+document.getElementById("total").textContent = "মোট: ৳" + taka(total);
 
 if(!cart.length){
-document.getElementById("cartItems").textContent="কার্ট খালি রয়েছে।";
+document.getElementById("cartItems").textContent = "কার্ট খালি রয়েছে।";
 return;
 }
 
-document.getElementById("cartItems").innerHTML=cart.map(x=>`
+document.getElementById("cartItems").innerHTML = cart.map(x => `
 <div class="cart-row">
 <div>
 <strong>${x.name}</strong><br>
@@ -553,34 +644,29 @@ alert("প্রথমে কার্টে পণ্য যোগ করুন
 return;
 }
 
-let total=cart.reduce((s,x)=>s+x.price*x.qty,0);
-let lines=cart.map(x=>
-`${x.name} × ${x.qty} = ৳${x.price*x.qty}`
-);
+let total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+let lines = cart.map(x => `${x.name} × ${x.qty} = ৳${x.price * x.qty}`);
 
-let message=
-"আমি Dream S Shop থেকে অর্ডার করতে চাই:\n"+
-lines.join("\n")+
-"\nমোট: ৳"+total+
+let message =
+"আমি Dream S Shop থেকে অর্ডার করতে চাই:\n" +
+lines.join("\n") +
+"\nমোট: ৳" + total +
 "\nনাম:\nঠিকানা:\nফোন:";
 
-window.open(
-"https://wa.me/"+WHATSAPP+
-"?text="+encodeURIComponent(message),
-"_blank"
-);
+window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message), "_blank");
 }
 
-search.addEventListener("input",renderProducts);
-category.addEventListener("change",renderProducts);
+search.addEventListener("input", renderProducts);
+category.addEventListener("change", renderProducts);
 
-category.innerHTML=
-'<option value="সব">সব ক্যাটাগরি</option>'+
-[...new Set(products.map(p=>p.category))]
-.map(c=>`<option value="${c}">${c}</option>`).join("");
+document.getElementById("year").textContent = new Date().getFullYear();
 
-document.getElementById("year").textContent=
-new Date().getFullYear();
+updateCategories();
+updateAdminState();
+renderCart();
+</script>
 
-updateAdminUI();
+</body>
+</html>
+
 
