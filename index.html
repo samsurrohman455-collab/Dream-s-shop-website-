@@ -1,672 +1,1196 @@
-
-
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101b17">
-<meta name="description" content="Dream S Shop - আপনার পছন্দের পণ্য অনলাইনে কিনুন।">
-<title>Dream S Shop | Premium Shopping</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f85606">
+<meta name="description" content="Dream S Shop - সেরা মানের পণ্য এখন আপনার হাতের মুঠোয়।">
+<title>Dream S Shop | অনলাইন শপিং</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
---dark:#101b17;
---green:#087f5b;
---light:#f5f8f6;
---gold:#d9ae62;
-}
-body{
-font-family:system-ui,"Noto Sans Bengali",sans-serif;
-background:var(--light);
-color:#18231e;
-}
-a{text-decoration:none;color:inherit}
-button{font:inherit;cursor:pointer;border:0}
-.container{width:92%;max-width:1200px;margin:auto}
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap');
 
-/* Header */
-.topbar{
-background:var(--dark);color:white;
-text-align:center;padding:9px;font-size:13px
-}
-header{
-background:white;position:sticky;top:0;
-z-index:20;box-shadow:0 3px 15px #0000000b
-}
-.nav{
-min-height:75px;display:flex;
-align-items:center;justify-content:space-between;gap:15px
-}
-.logo{font-size:25px;font-weight:900;color:var(--green)}
-.logo span{color:var(--gold)}
-.links{display:flex;gap:25px;align-items:center}
-.links a{font-weight:650}
-.links a:hover{color:var(--green)}
-.cart-btn{
-background:var(--green);color:white;
-padding:11px 17px;border-radius:30px
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #f85606; /* দারাজ অরেঞ্জ */
+    --primary-hover: #d94800;
+    --secondary: #2e2e54;
+    --bg: #f5f5f5;
+    --white: #ffffff;
+    --text: #212121;
+    --muted: #757575;
+    --border: #e0e0e0;
+  }
 
-/* Hero */
-.hero{
-background:linear-gradient(120deg,#10251c,#164b36);
-color:white;padding:80px 0;
-overflow:hidden;
-}
-.hero-content{max-width:680px}
-.hero small{color:var(--gold);font-weight:bold;letter-spacing:2px}
-.hero h1{
-font-size:clamp(35px,6vw,65px);
-line-height:1.2;margin:20px 0
-}
-.hero p{color:#d4e5dc;line-height:1.8;margin-bottom:28px}
-.primary{
-display:inline-block;background:var(--gold);
-color:#17231d;padding:14px 25px;
-border-radius:30px;font-weight:800
-}
-.primary:hover{background:white}
+  body {
+    font-family: 'Noto Sans Bengali', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
 
-/* Features */
-.features{
-display:grid;grid-template-columns:repeat(3,1fr);
-gap:15px;margin-top:30px
-}
-.feature{
-background:white;border-radius:15px;
-padding:22px;text-align:center;
-box-shadow:0 5px 20px #00000008
-}
-.feature h3{font-size:16px;margin:8px 0}
-.feature p{font-size:13px;color:#777}
+  a { text-decoration: none; color: inherit; }
+  button { font: inherit; cursor: pointer; border: none; outline: none; }
+  .container { width: 94%; max-width: 1220px; margin: auto; }
 
-/* Products */
-section{padding:55px 0}
-.heading{text-align:center;margin-bottom:30px}
-.heading h2{font-size:30px;margin-bottom:9px}
-.heading p{color:#78847d}
-.filters{
-display:flex;gap:12px;margin-bottom:25px;flex-wrap:wrap;
-}
-.filters input,.filters select{
-flex:1;min-width:200px;padding:14px;
-border:1px solid #e2e9e4;border-radius:12px;
-background:white;outline:none
-}
-.admin-add-product-bar{
-margin-bottom:20px;text-align:right;
-}
-.add-prod-btn{
-background:var(--green);color:white;
-padding:10px 20px;border-radius:10px;font-weight:bold;
-}
+  /* Top Bar */
+  .topbar {
+    background: #ececec;
+    color: #424242;
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .topbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.products{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:22px
-}
-.product{
-background:white;border-radius:17px;
-overflow:hidden;border:1px solid #e9eee9;
-transition:.25s;position:relative;
-}
-.product:hover{
-transform:translateY(-6px);
-box-shadow:0 15px 35px #00000012
-}
-.img-wrap{
-position:relative;
-width:100%;
-height:240px;
-background:#e9efeb;
-overflow:hidden;
-}
-.product img{
-width:100%;height:100%;
-object-fit:cover;
-display:block;
-}
-.admin-upload-badge{
-position:absolute;
-bottom:10px;
-right:10px;
-background:rgba(16, 27, 23, 0.85);
-color:#fff;
-padding:6px 12px;
-border-radius:8px;
-font-size:12px;
-font-weight:bold;
-pointer-events:none;
-border:1px solid var(--gold);
-}
-.img-wrap.admin-active{
-cursor:pointer;
-}
-.img-wrap.admin-active:hover{
-opacity:0.9;
-}
+  /* Main Header (Daraz Style) */
+  header {
+    background: var(--primary);
+    color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+  }
+  .logo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .logo span {
+    background: var(--white);
+    color: var(--primary);
+    padding: 0 7px;
+    border-radius: 6px;
+  }
 
-.info{padding:18px}
-.tag{color:var(--green);font-size:13px;font-weight:bold}
-.info h3{margin:8px 0}
-.info p{color:#78847d;font-size:14px}
-.price-row{
-display:flex;justify-content:space-between;
-align-items:center;margin:12px 0;
-}
-.price{
-color:var(--green)!important;
-font-size:21px!important;
-font-weight:900;
-}
-.admin-actions{
-display:flex;gap:6px;
-}
-.admin-edit-btn{
-background:#e2e9e4;color:#18231e;
-padding:5px 10px;font-size:12px;
-border-radius:6px;font-weight:bold;
-}
-.admin-del-btn{
-background:#ffebee;color:#c22;
-padding:5px 10px;font-size:12px;
-border-radius:6px;font-weight:bold;
-}
-.add{
-width:100%;padding:12px;
-background:var(--dark);color:white;
-border-radius:10px;font-weight:bold
-}
-.add:hover{background:var(--green)}
+  /* Search Box */
+  .search-box {
+    flex: 1;
+    max-width: 620px;
+    display: flex;
+    background: var(--white);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .search-box input {
+    flex: 1;
+    padding: 11px 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .search-box button {
+    background: #ffe1d2;
+    color: var(--primary);
+    padding: 0 20px;
+    font-weight: 700;
+    transition: 0.2s;
+  }
+  .search-box button:hover {
+    background: #ffd0b8;
+  }
 
-/* Offers */
-.offer{
-background:#e5f2e9;border-radius:20px;
-padding:35px;text-align:center
-}
-.offer h2{font-size:27px;margin-bottom:10px}
-.offer p{color:#596b60;margin-bottom:20px}
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .cart-trigger {
+    position: relative;
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+  }
+  .cart-trigger:hover { background: rgba(255,255,255,0.25); }
+  .badge {
+    background: var(--white);
+    color: var(--primary);
+    font-size: 12px;
+    padding: 1px 7px;
+    border-radius: 12px;
+    font-weight: 800;
+  }
 
-/* Cart */
-.cart{
-background:white;border-radius:16px;
-padding:22px;border:1px solid #e8eee9
-}
-.cart-row{
-display:flex;justify-content:space-between;
-align-items:center;gap:15px;
-padding:14px 0;border-bottom:1px solid #eee
-}
-.qty{display:flex;align-items:center;gap:9px}
-.qty button{
-background:#e8f3ec;padding:6px 11px;
-border-radius:7px;color:var(--green)
-}
-.total{font-size:22px;font-weight:900;color:var(--green)}
-.cart-bottom{
-display:flex;justify-content:space-between;
-align-items:center;gap:15px;margin-top:20px
-}
-.order{
-background:#16834b;color:white;
-padding:14px 22px;border-radius:10px
-}
+  /* Admin Control Bar (Hidden by default) */
+  .admin-bar {
+    background: #1e293b;
+    color: #fff;
+    padding: 12px 0;
+    border-bottom: 3px solid var(--primary);
+    display: none;
+  }
+  .admin-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .admin-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-admin {
+    padding: 7px 14px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-add { background: #10b981; color: white; }
+  .btn-pass { background: #3b82f6; color: white; }
+  .btn-logout { background: #ef4444; color: white; }
 
-/* Contact */
-.contact{
-background:var(--dark);color:white;
-text-align:center;border-radius:20px;padding:40px 20px
-}
-.contact p{color:#cbd8d0;margin:12px}
-.contact a{display:inline-block;margin-top:12px}
+  /* Hero Banner */
+  .hero-section {
+    margin-top: 16px;
+  }
+  .hero-banner {
+    background: linear-gradient(135deg, #2e2e54 0%, #f85606 100%);
+    border-radius: 10px;
+    color: var(--white);
+    padding: 45px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  .hero-text { max-width: 580px; }
+  .hero-tag {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .hero-text h1 {
+    font-size: clamp(26px, 4vw, 42px);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .hero-text p {
+    font-size: 15px;
+    opacity: 0.92;
+    margin-bottom: 22px;
+  }
+  .hero-btn {
+    background: var(--white);
+    color: var(--primary);
+    padding: 12px 26px;
+    border-radius: 5px;
+    font-weight: 800;
+    display: inline-block;
+    transition: 0.2s;
+  }
+  .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-/* Footer */
-footer{
-background:#0b1511;color:#c8d4cd;
-padding:28px 10px;text-align:center;margin-top:45px;
-position:relative;
-}
-footer strong{color:var(--gold)}
-.secret-trigger{
-position:absolute;bottom:5px;right:5px;
-width:20px;height:20px;cursor:pointer;opacity:0.01;
-}
+  /* Service Highlights */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .highlight-card {
+    background: var(--white);
+    padding: 14px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .highlight-icon { font-size: 24px; }
+  .highlight-card h4 { font-size: 14px; font-weight: 700; }
+  .highlight-card p { font-size: 12px; color: var(--muted); }
 
-@media(max-width:750px){
-.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.features{grid-template-columns:1fr}
-.links{gap:12px;font-size:13px}
-.nav{flex-wrap:wrap;padding:13px 0}
-.hero{padding:55px 0}
-.img-wrap{height:190px}
-}
-@media(max-width:480px){
-.products{grid-template-columns:1fr}
-.img-wrap{height:240px}
-.filters{flex-direction:column}
-.cart-bottom{flex-direction:column;align-items:stretch}
-.order{width:100%}
-.cart-row{flex-direction:column;align-items:flex-start}
-}
+  /* Category Pills */
+  .cat-section {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .cat-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--secondary);
+  }
+  .cat-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cat-pill {
+    padding: 7px 16px;
+    background: #f0f2f5;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    transition: 0.2s;
+  }
+  .cat-pill:hover, .cat-pill.active {
+    background: var(--primary);
+    color: var(--white);
+  }
+
+  /* Product Grid (Daraz Style) */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .section-header h2 {
+    font-size: 21px;
+    color: var(--text);
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .product-card {
+    background: var(--white);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    border-color: #e0e0e0;
+    transform: translateY(-2px);
+  }
+  .img-box {
+    position: relative;
+    width: 100%;
+    height: 210px;
+    background: #fafafa;
+    overflow: hidden;
+  }
+  .img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .img-box.editable { cursor: pointer; }
+  .change-photo-tag {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  .card-body {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-cat {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    flex: 1;
+  }
+  .card-price {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+  .card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .btn-cart {
+    width: 100%;
+    background: var(--primary);
+    color: var(--white);
+    padding: 9px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.2s;
+  }
+  .btn-cart:hover { background: var(--primary-hover); }
+
+  .admin-card-tools {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .btn-edit {
+    flex: 1;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .btn-del {
+    flex: 1;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* Cart Drawer */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    display: none;
+    justify-content: flex-end;
+  }
+  .cart-drawer {
+    width: 100%;
+    max-width: 400px;
+    background: var(--white);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  .cart-header {
+    background: var(--secondary);
+    color: var(--white);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-cart {
+    background: transparent;
+    color: var(--white);
+    font-size: 22px;
+  }
+  .cart-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+  }
+  .qty-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-box button {
+    width: 26px;
+    height: 26px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  .cart-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    background: #fafafa;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .btn-checkout {
+    width: 100%;
+    background: #16a34a;
+    color: var(--white);
+    padding: 13px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* Modals (Welcome, Login, Product Form, Password Change) */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-box {
+    background: var(--white);
+    width: 100%;
+    max-width: 420px;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    animation: popIn 0.25s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-box h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: var(--secondary);
+  }
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 14px;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .btn-save {
+    background: var(--primary);
+    color: var(--white);
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+
+  /* Welcome Modal Specific */
+  .welcome-box {
+    text-align: center;
+    border-top: 6px solid var(--primary);
+  }
+  .welcome-icon {
+    font-size: 46px;
+    margin-bottom: 10px;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--secondary);
+    color: #d1d5db;
+    margin-top: 45px;
+    padding: 35px 0 20px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  footer h4 { color: var(--white); margin-bottom: 10px; }
+  footer p { font-size: 13px; line-height: 1.7; }
+  .copyright {
+    text-align: center;
+    padding-top: 18px;
+    font-size: 13px;
+    user-select: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+    .highlights { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 650px) {
+    .nav { flex-wrap: wrap; }
+    .search-box { order: 3; max-width: 100%; width: 100%; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .hero-banner { padding: 28px 20px; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
-
 <body>
 
+<!-- Top Info Bar -->
 <div class="topbar">
-Dream S Shop | আপনার পছন্দের পণ্য এখন অনলাইনে
+  <div class="container">
+    <span>সেরা দামে আসল পণ্যের বিশ্বস্ত ঠিকানা</span>
+    <span>হেল্পলাইন / WhatsApp: 01750-538990</span>
+  </div>
 </div>
 
+<!-- Main Daraz-Style Header -->
 <header>
-<nav class="container nav">
-<a href="#home" class="logo">DREAM <span>S</span> SHOP</a>
-<div class="links">
-<a href="#home">হোম</a>
-<a href="#products">পণ্য</a>
-<a href="#contact">যোগাযোগ</a>
-<a href="#cart" class="cart-btn">
-কার্ট (<span id="count">০</span>)
-</a>
-</div>
-</nav>
+  <div class="container nav">
+    <a href="#" class="logo">Dream <span>S</span> Shop</a>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Dream S Shop-এ পণ্য খুঁজুন...">
+      <button onclick="renderProducts()">খুঁজুন</button>
+    </div>
+
+    <div class="nav-actions">
+      <button class="cart-trigger" onclick="toggleCart(true)">
+        🛒 কার্ট <span class="badge" id="cartCount">০</span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<main>
-
-<section class="hero" id="home">
-<div class="container hero-content">
-<small>WELCOME TO DREAM S SHOP</small>
-<h1>আপনার পছন্দের<br>শপিং শুরু হোক আজই!</h1>
-<p>
-সেরা পণ্য, সুন্দর অভিজ্ঞতা এবং সহজ অর্ডার।
-Dream S Shop থেকে আপনার প্রয়োজনীয় পণ্য বেছে নিন।
-</p>
-<a href="#products" class="primary">এখনই কেনাকাটা করুন →</a>
-</div>
-</section>
-
-<div class="container features">
-<div class="feature">
-<h3>🛍️ পণ্যের সংগ্রহ</h3>
-<p>বিভিন্ন ধরনের পণ্য</p>
-</div>
-<div class="feature">
-<h3>📦 সহজ অর্ডার</h3>
-<p>WhatsApp-এ অর্ডার</p>
-</div>
-<div class="feature">
-<h3>💬 সরাসরি যোগাযোগ</h3>
-<p>আমাদের সঙ্গে কথা বলুন</p>
-</div>
+<!-- Secret Admin Bar (Only visible after Admin Login) -->
+<div class="admin-bar" id="adminBar">
+  <div class="container">
+    <div><strong>🛡️ অ্যাডমিন প্যানেল চালু আছে</strong> (শুধুমাত্র আপনি পরিবর্তন করতে পারবেন)</div>
+    <div class="admin-btns">
+      <button class="btn-admin btn-add" onclick="openProductModal()">+ নতুন পণ্য যোগ করুন</button>
+      <button class="btn-admin btn-pass" onclick="openPassModal()">🔑 পাসওয়ার্ড পরিবর্তন</button>
+      <button class="btn-admin btn-logout" onclick="adminLogout()">লগআউট</button>
+    </div>
+  </div>
 </div>
 
-<section class="container" id="products">
-<div class="heading">
-<h2>আমাদের কালেকশন</h2>
-<p>আপনার পছন্দের পণ্যটি খুঁজে নিন</p>
-</div>
+<main class="container">
 
-<!-- অ্যাডমিন মোডে নতুন পণ্য যোগ করার অপশন -->
-<div id="adminAddBar" class="admin-add-product-bar" style="display:none;">
-<button class="add-prod-btn" onclick="addNewProduct()">+ নতুন পণ্য যোগ করুন</button>
-</div>
+  <!-- Hero Banner -->
+  <section class="hero-section">
+    <div class="hero-banner">
+      <div class="hero-text">
+        <span class="hero-tag">🔥 স্পেশাল কালেকশন ২০২৬</span>
+        <h1>আপনার পছন্দের সেরা পণ্য এখন হাতের মুঠোয়!</h1>
+        <p>সাশ্রয়ী মূল্যে প্রিমিয়াম কোয়ালিটির পণ্য অর্ডার করুন সরাসরি WhatsApp-এর মাধ্যমে। দ্রুত ডেলিভারি ও বিশ্বস্ত সেবা।</p>
+        <a href="#productsArea" class="hero-btn">এখনই কেনাকাটা করুন →</a>
+      </div>
+    </div>
+  </section>
 
-<div class="filters">
-<input id="search" placeholder="🔍 পণ্য খুঁজুন...">
-<select id="category">
-<option value="সব">সব ক্যাটাগরি</option>
-</select>
-</div>
+  <!-- Service Highlights -->
+  <div class="highlights">
+    <div class="highlight-card">
+      <div class="highlight-icon">🚚</div>
+      <div>
+        <h4>দ্রুত ডেলিভারি</h4>
+        <p>সারা দেশে হোম ডেলিভারি</p>
+      </div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-icon">✅</div>
+      <div>
+        <h4>১০০% মানসম্মত পণ্য</h4>
+        <p>সেরা কোয়ালিটির নিশ্চয়তা</p>
+      </div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-icon">💬</div>
+      <div>
+        <h4>সহজ অর্ডার</h4>
+        <p>সরাসরি WhatsApp-এ অর্ডার</p>
+      </div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-icon">💳</div>
+      <div>
+        <h4>ক্যাশ অন ডেলিভারি</h4>
+        <p>পণ্য হাতে পেয়ে টাকা পরিশোধ</p>
+      </div>
+    </div>
+  </div>
 
-<div class="products" id="productList"></div>
-<p id="empty" hidden style="text-align:center;padding:25px">
-কোনো পণ্য পাওয়া যায়নি।
-</p>
-</section>
+  <!-- Category Filter -->
+  <div class="cat-section" id="productsArea">
+    <div class="cat-title">ক্যাটাগরি অনুযায়ী পণ্য দেখুন</div>
+    <div class="cat-list" id="categoryList"></div>
+  </div>
 
-<section class="container">
-<div class="offer">
-<h2>✨ Dream S Shop Special</h2>
-<p>আপনার পছন্দের পণ্য বেছে নিন এবং সহজে অর্ডার করুন।</p>
-<a href="#products" class="primary">পণ্য দেখুন</a>
-</div>
-</section>
+  <!-- Products Section -->
+  <section>
+    <div class="section-header">
+      <h2>আমাদের পণ্যসমূহ</h2>
+      <span id="productCountText" style="font-size:13px; color:#757575;"></span>
+    </div>
 
-<section class="container" id="cart">
-<div class="heading">
-<h2>🛒 আপনার শপিং কার্ট</h2>
-<p>আপনার পছন্দের পণ্যগুলো এখানে থাকবে</p>
-</div>
-<div class="cart">
-<div id="cartItems">কার্ট খালি রয়েছে।</div>
-<div class="cart-bottom">
-<div class="total" id="total">মোট: ৳০</div>
-<button class="order" onclick="checkout()">
-WhatsApp-এ অর্ডার করুন
-</button>
-</div>
-</div>
-</section>
-
-<section class="container" id="contact">
-<div class="contact">
-<h2>আমাদের সঙ্গে যোগাযোগ করুন</h2>
-<p>WhatsApp: 01750-538990</p>
-<a class="primary"
-href="https://wa.me/8801750538990"
-target="_blank" rel="noopener">
-WhatsApp Message
-</a>
-</div>
-</section>
+    <div class="products-grid" id="productGrid"></div>
+    <p id="emptyMsg" style="display:none; text-align:center; padding:40px; background:#fff; border-radius:8px; color:#757575;">
+      দুঃখিত, এই নামে কোনো পণ্য পাওয়া যায়নি।
+    </p>
+  </section>
 
 </main>
 
-<input type="file" id="photoUploader" accept="image/*" hidden>
+<!-- Hidden File Input for Image Upload -->
+<input type="file" id="imageFileInput" accept="image/*" hidden>
 
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay" onclick="if(event.target===this) toggleCart(false)">
+  <div class="cart-drawer">
+    <div class="cart-header">
+      <h3>🛒 আপনার শপিং কার্ট</h3>
+      <button class="close-cart" onclick="toggleCart(false)">✕</button>
+    </div>
+    <div class="cart-body" id="cartItemsContainer"></div>
+    <div class="cart-footer">
+      <div class="total-row">
+        <span>সর্বমোট বিল:</span>
+        <span style="color:var(--primary);" id="cartTotal">৳০</span>
+      </div>
+      <button class="btn-checkout" onclick="orderViaWhatsApp()">
+        WhatsApp-এ অর্ডার কনফার্ম করুন
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 1. Welcome Modal (Shows on Page Load) -->
+<div class="modal-backdrop" id="welcomeModal">
+  <div class="modal-box welcome-box">
+    <div class="welcome-icon">🛍️</div>
+    <h3 style="font-size:24px; color:var(--primary);">আমাদের Dream S Shop এ স্বাগতম!</h3>
+    <p style="color:#555; font-size:15px; margin:10px 0 20px;">
+      আমাদের অনলাইন শপে আপনাকে স্বাগতম। আপনার পছন্দের পণ্যটি বেছে নিন এবং খুব সহজেই অর্ডার করুন।
+    </p>
+    <button class="btn-save" style="width:100%; padding:12px; font-size:15px;" onclick="closeModal('welcomeModal')">
+      কেনাকাটা শুরু করুন
+    </button>
+  </div>
+</div>
+
+<!-- 2. Secret Admin Login Modal (Password masked, no pre-filled text) -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal-box">
+    <h3>🔒 অ্যাডমিন লগইন</h3>
+    <p style="font-size:13px; color:#666; margin-bottom:14px;">শুধুমাত্র শপ অ্যাডমিনের জন্য সংরক্ষিত।</p>
+    <div class="form-group">
+      <label>গোপন পাসওয়ার্ড দিন:</label>
+      <input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('loginModal')">বাতিল</button>
+      <button class="btn-save" onclick="verifyAdminLogin()">লগইন করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Add / Edit Product Modal (Admin Only) -->
+<div class="modal-backdrop" id="productModal">
+  <div class="modal-box">
+    <h3 id="productModalTitle">নতুন পণ্য যোগ করুন</h3>
+    <input type="hidden" id="editProdId">
+    <div class="form-group">
+      <label>পণ্যের নাম *</label>
+      <input type="text" id="prodName" placeholder="যেমন: প্রিমিয়াম কটন টি-শার্ট">
+    </div>
+    <div class="form-group">
+      <label>পণ্যের ধরন / ক্যাটাগরি *</label>
+      <input type="text" id="prodCategory" placeholder="যেমন: পোশাক, ইলেকট্রনিক্স, ব্যাগ">
+    </div>
+    <div class="form-group">
+      <label>পণ্যের দাম (টাকায়) *</label>
+      <input type="number" id="prodPrice" placeholder="যেমন: 650">
+    </div>
+    <div class="form-group">
+      <label>পণ্যের সংক্ষিপ্ত বিবরণ</label>
+      <textarea id="prodDesc" rows="2" placeholder="পণ্যের মান বা বৈশিষ্ট্য লিখুন..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('productModal')">বাতিল</button>
+      <button class="btn-save" onclick="saveProduct()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Change Admin Password Modal (Admin Only) -->
+<div class="modal-backdrop" id="passModal">
+  <div class="modal-box">
+    <h3>🔑 অ্যাডমিন পাসওয়ার্ড পরিবর্তন</h3>
+    <div class="form-group">
+      <label>বর্তমান পাসওয়ার্ড:</label>
+      <input type="password" id="oldPassInput" placeholder="বর্তমান পাসওয়ার্ড দিন">
+    </div>
+    <div class="form-group">
+      <label>নতুন পাসওয়ার্ড:</label>
+      <input type="password" id="newPassInput" placeholder="নতুন পাসওয়ার্ড দিন">
+    </div>
+    <div class="form-group">
+      <label>নতুন পাসওয়ার্ড নিশ্চিত করুন:</label>
+      <input type="password" id="confirmPassInput" placeholder="আবার নতুন পাসওয়ার্ড দিন">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('passModal')">বাতিল</button>
+      <button class="btn-save" onclick="changeAdminPassword()">পাসওয়ার্ড আপডেট করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
 <footer>
-<strong>DREAM S SHOP</strong>
-<p>© <span id="year"></span> All Rights Reserved.</p>
-<p>আপনার বিশ্বস্ত অনলাইন শপ</p>
-<!-- গোপন ট্রিগার: এখানে ৩ বার ট্যাপ করলে পাসওয়ার্ড চাইবে -->
-<div class="secret-trigger" onclick="secretAdminLogin()"></div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Dream S Shop</h4>
+        <p>আমরা দিচ্ছি সেরা মানের পণ্য এবং দ্রুততম হোম ডেলিভারি সুবিধা। আপনার সন্তুষ্টিই আমাদের লক্ষ্য।</p>
+      </div>
+      <div>
+        <h4>গ্রাহক সেবা</h4>
+        <p>• ক্যাশ অন ডেলিভারি<br>• সহজ রিটার্ন পলিসি<br>• ২৪/৭ WhatsApp সাপোর্ট</p>
+      </div>
+      <div>
+        <h4>যোগাযোগ</h4>
+        <p>WhatsApp: 01750-538990<br>বাংলাদেশ</p>
+      </div>
+    </div>
+    <!-- Secret Admin Trigger: Click 5 times on Copyright text -->
+    <div class="copyright" id="secretTrigger">
+      © <span id="year"></span> Dream S Shop | সর্বস্বত্ব সংরক্ষিত।
+    </div>
+  </div>
 </footer>
 
 <script>
-const ADMIN_PASS = "1234"; // আপনার অ্যাডমিন পাসওয়ার্ড
-let isAdmin = localStorage.getItem("dream_shop_admin") === "true";
-let currentUploadId = null;
+  const WHATSAPP_NUMBER = "8801750538990";
+  const DEFAULT_ADMIN_PASS = "admin123"; // প্রথমবার লগইনের পাসওয়ার্ড
 
-let savedImages = JSON.parse(localStorage.getItem("dream_shop_images") || "{}");
+  // পাসওয়ার্ড লোকাল স্টোরেজ থেকে নেওয়া (পরিবর্তন করলে সেটাই সেভ থাকবে)
+  function getStoredPassword() {
+    return localStorage.getItem("dss_admin_pass") || DEFAULT_ADMIN_PASS;
+  }
 
-let defaultProducts = [
-{
-id: 1,
-name: "কটন টি-শার্ট",
-price: 650,
-category: "পোশাক",
-description: "আরামদায়ক কটন টি-শার্ট",
-image: "tshirt.jpg"
-},
-{
-id: 2,
-name: "স্টাইলিশ ব্যাগ",
-price: 1200,
-category: "অ্যাক্সেসরিজ",
-description: "প্রতিদিন ব্যবহারের সুন্দর ব্যাগ",
-image: "bag.jpg"
-},
-{
-id: 3,
-name: "পানির বোতল",
-price: 450,
-category: "ঘর ও জীবনযাপন",
-description: "সহজে বহনযোগ্য বোতল",
-image: "bottle.jpg"
-}
-];
+  let isAdmin = sessionStorage.getItem("dss_is_admin") === "true";
+  let selectedCategory = "সব";
+  let currentUploadProductId = null;
+  let cart = [];
 
-// লোকালস্টোরেজ থেকে কাস্টম প্রোডাক্ট ও আপডেট ডাটা লোড করা
-let products = JSON.parse(localStorage.getItem("dream_shop_products") || JSON.stringify(defaultProducts));
+  // ডিফল্ট পণ্য তালিকা
+  const defaultProducts = [
+    { id: 101, name: "প্রিমিয়াম কটন টি-শার্ট", category: "পোশাক", price: 650, description: "১০০% খাঁটি ও আরামদায়ক সুতি কাপড়ের টি-শার্ট।", image: "" },
+    { id: 102, name: "স্মার্ট ট্রাভেল ব্যাকপ্যাক", category: "ব্যাগ ও অ্যাক্সেসরিজ", price: 1250, description: "ওয়াটারপ্রুফ এবং মজবুত ফ্যাশনেবল ব্যাকপ্যাক।", image: "" },
+    { id: 103, name: "ইনসুলেটেড পানির বোতল", category: "ঘর ও জীবনযাপন", price: 450, description: "দীর্ঘক্ষণ পানি ঠান্ডা ও গরম রাখার স্টেইনলেস বোতল।", image: "" },
+    { id: 104, name: "ওয়্যারলেস ব্লুটুথ ইয়ারবাডস", category: "ইলেকট্রনিক্স", price: 1490, description: "সুপার সাউন্ড কোয়ালিটি এবং দীর্ঘস্থায়ী ব্যাটারি ব্যাকআপ।", image: "" }
+  ];
 
-const WHATSAPP = "8801750538990";
-let cart = [];
+  let products = JSON.parse(localStorage.getItem("dss_products")) || defaultProducts;
+  let savedImages = JSON.parse(localStorage.getItem("dss_images")) || {};
 
-const list = document.getElementById("productList");
-const search = document.getElementById("search");
-const category = document.getElementById("category");
-const photoUploader = document.getElementById("photoUploader");
-const adminAddBar = document.getElementById("adminAddBar");
+  // ওয়েবসাইট লোড হলে স্বাগতম মেসেজ দেখানো
+  window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("year").textContent = new Date().getFullYear();
+    openModal("welcomeModal");
+    updateAdminUI();
+    renderCategories();
+    renderProducts();
+    renderCart();
+  });
 
-// কিবোর্ডে Ctrl + Shift + A চাপলেও অ্যাডমিন প্যানেল আসবে
-window.addEventListener("keydown", function(e){
-if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a"){
-e.preventDefault();
-secretAdminLogin();
-}
-});
+  // গোপন অ্যাডমিন লগইন ট্রিগার (কপিরাইট লেখায় ৫ বার ক্লিক করলে বা Ctrl+Shift+A চাপলে)
+  let clickCount = 0;
+  let clickTimer = null;
+  document.getElementById("secretTrigger").addEventListener("click", () => {
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
+    if (clickCount >= 5) {
+      clickCount = 0;
+      if (!isAdmin) {
+        document.getElementById("adminPassInput").value = "";
+        openModal("loginModal");
+        setTimeout(() => document.getElementById("adminPassInput").focus(), 100);
+      }
+    }
+  });
 
-function secretAdminLogin(){
-if(isAdmin){
-if(confirm("অ্যাডমিন মোড বন্ধ করতে চান?")){
-isAdmin = false;
-localStorage.setItem("dream_shop_admin", "false");
-alert("অ্যাডমিন মোড বন্ধ করা হয়েছে।");
-updateAdminState();
-}
-} else {
-let pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
-if(pass === ADMIN_PASS){
-isAdmin = true;
-localStorage.setItem("dream_shop_admin", "true");
-alert("সফলভাবে অ্যাডমিন মোড চালু হয়েছে!");
-updateAdminState();
-} else if(pass !== null){
-alert("ভুল পাসওয়ার্ড!");
-}
-}
-}
+  window.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a") {
+      e.preventDefault();
+      if (!isAdmin) {
+        document.getElementById("adminPassInput").value = "";
+        openModal("loginModal");
+      }
+    }
+  });
 
-function updateAdminState(){
-adminAddBar.style.display = isAdmin ? "block" : "none";
-renderProducts();
-updateCategories();
-}
+  // পাসওয়ার্ড ইনপুটে Enter চাপলে লগইন হবে
+  document.getElementById("adminPassInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") verifyAdminLogin();
+  });
 
-function triggerUpload(id){
-if(!isAdmin) return;
-currentUploadId = id;
-photoUploader.value = "";
-photoUploader.click();
-}
+  function verifyAdminLogin() {
+    const inputPass = document.getElementById("adminPassInput").value;
+    if (inputPass === getStoredPassword()) {
+      isAdmin = true;
+      sessionStorage.setItem("dss_is_admin", "true");
+      document.getElementById("adminPassInput").value = "";
+      closeModal("loginModal");
+      updateAdminUI();
+      alert("স্বাগতম অ্যাডমিন! এখন আপনি পণ্যের ছবি, নাম, ধরন ও দাম পরিবর্তন করতে পারবেন।");
+    } else {
+      alert("ভুল পাসওয়ার্ড! অনুগ্রহ করে সঠিক পাসওয়ার্ড দিন।");
+      document.getElementById("adminPassInput").value = "";
+    }
+  }
 
-photoUploader.addEventListener("change", function(e){
-const file = e.target.files[0];
-if(!file || !currentUploadId) return;
+  function adminLogout() {
+    isAdmin = false;
+    sessionStorage.removeItem("dss_is_admin");
+    updateAdminUI();
+    alert("অ্যাডমিন প্যানেল থেকে লগআউট করা হয়েছে।");
+  }
 
-const reader = new FileReader();
-reader.onload = function(event){
-const img = new Image();
-img.onload = function(){
-const canvas = document.createElement("canvas");
-const maxW = 600;
-const scale = maxW / img.width;
-canvas.width = maxW;
-canvas.height = img.height * scale;
-const ctx = canvas.getContext("2d");
-ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  function updateAdminUI() {
+    document.getElementById("adminBar").style.display = isAdmin ? "block" : "none";
+    renderProducts();
+  }
 
-const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
-savedImages[currentUploadId] = compressedDataUrl;
-localStorage.setItem("dream_shop_images", JSON.stringify(savedImages));
-renderProducts();
-};
-img.src = event.target.result;
-};
-reader.readAsDataURL(file);
-});
+  // পাসওয়ার্ড পরিবর্তন (শুধুমাত্র অ্যাডমিন)
+  function openPassModal() {
+    if (!isAdmin) return;
+    document.getElementById("oldPassInput").value = "";
+    document.getElementById("newPassInput").value = "";
+    document.getElementById("confirmPassInput").value = "";
+    openModal("passModal");
+  }
 
-function editProduct(id){
-let p = products.find(x => x.id === id);
-let newName = prompt("পণ্যের নতুন নাম:", p.name);
-if(newName === null) return;
-let newPrice = prompt("পণ্যের নতুন দাম:", p.price);
-if(newPrice === null || isNaN(newPrice)) return;
-let newDesc = prompt("পণ্যের বিবরণ:", p.description);
-if(newDesc === null) return;
+  function changeAdminPassword() {
+    if (!isAdmin) return;
+    const oldP = document.getElementById("oldPassInput").value;
+    const newP = document.getElementById("newPassInput").value.trim();
+    const confP = document.getElementById("confirmPassInput").value.trim();
 
-p.name = newName.trim();
-p.price = Number(newPrice);
-p.description = newDesc.trim();
+    if (oldP !== getStoredPassword()) {
+      alert("বর্তমান পাসওয়ার্ডটি সঠিক নয়!");
+      return;
+    }
+    if (newP.length < 4) {
+      alert("নতুন পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে!");
+      return;
+    }
+    if (newP !== confP) {
+      alert("নতুন পাসওয়ার্ড দুটি মিলছে না!");
+      return;
+    }
 
-localStorage.setItem("dream_shop_products", JSON.stringify(products));
-renderProducts();
-updateCategories();
-alert("পণ্য সফলভাবে আপডেট করা হয়েছে!");
-}
+    localStorage.setItem("dss_admin_pass", newP);
+    closeModal("passModal");
+    alert("আপনার অ্যাডমিন পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!");
+  }
 
-function addNewProduct(){
-let name = prompt("নতুন পণ্যের নাম:");
-if(!name) return;
-let price = prompt("পণ্যের দাম:");
-if(!price || isNaN(price)) return;
-let cat = prompt("ক্যাটাগরি (যেমন: পোশাক, অ্যাক্সেসরিজ):", "সাধারণ");
-if(!cat) return;
-let desc = prompt("পণ্যের বিবরণ:", "নতুন পণ্য");
+  // পণ্য যোগ ও এডিট (শুধুমাত্র অ্যাডমিন)
+  function openProductModal(id = null) {
+    if (!isAdmin) return;
+    if (id) {
+      const p = products.find(x => x.id === id);
+      document.getElementById("productModalTitle").textContent = "পণ্য এডিট করুন";
+      document.getElementById("editProdId").value = p.id;
+      document.getElementById("prodName").value = p.name;
+      document.getElementById("prodCategory").value = p.category;
+      document.getElementById("prodPrice").value = p.price;
+      document.getElementById("prodDesc").value = p.description;
+    } else {
+      document.getElementById("productModalTitle").textContent = "নতুন পণ্য যোগ করুন";
+      document.getElementById("editProdId").value = "";
+      document.getElementById("prodName").value = "";
+      document.getElementById("prodCategory").value = "";
+      document.getElementById("prodPrice").value = "";
+      document.getElementById("prodDesc").value = "";
+    }
+    openModal("productModal");
+  }
 
-let newP = {
-id: Date.now(),
-name: name.trim(),
-price: Number(price),
-category: cat.trim(),
-description: desc ? desc.trim() : "",
-image: ""
-};
+  function saveProduct() {
+    if (!isAdmin) return;
+    const id = document.getElementById("editProdId").value;
+    const name = document.getElementById("prodName").value.trim();
+    const category = document.getElementById("prodCategory").value.trim();
+    const price = Number(document.getElementById("prodPrice").value);
+    const description = document.getElementById("prodDesc").value.trim();
 
-products.push(newP);
-localStorage.setItem("dream_shop_products", JSON.stringify(products));
-renderProducts();
-updateCategories();
-alert("নতুন পণ্য যোগ করা হয়েছে! এখন ছবিতে ক্লিক করে ছবি আপলোড করে নিন।");
-}
+    if (!name || !category || !price || price <= 0) {
+      alert("অনুগ্রহ করে পণ্যের নাম, ধরন (ক্যাটাগরি) এবং সঠিক দাম লিখুন।");
+      return;
+    }
 
-function deleteProduct(id){
-if(confirm("আপনি কি এই পণ্যটি মুছে ফেলতে চান?")){
-products = products.filter(x => x.id !== id);
-localStorage.setItem("dream_shop_products", JSON.stringify(products));
-renderProducts();
-updateCategories();
-}
-}
+    if (id) {
+      const p = products.find(x => x.id == id);
+      p.name = name;
+      p.category = category;
+      p.price = price;
+      p.description = description;
+    } else {
+      products.unshift({
+        id: Date.now(),
+        name,
+        category,
+        price,
+        description,
+        image: ""
+      });
+    }
 
-function taka(n){
-return Number(n).toLocaleString("bn-BD");
-}
+    localStorage.setItem("dss_products", JSON.stringify(products));
+    closeModal("productModal");
+    renderCategories();
+    renderProducts();
+  }
 
-function updateCategories(){
-let cats = ["সব", ...new Set(products.map(p => p.category))];
-category.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join("");
-}
+  function deleteProduct(id) {
+    if (!isAdmin) return;
+    if (confirm("আপনি কি নিশ্চিতভাবে এই পণ্যটি মুছে ফেলতে চান?")) {
+      products = products.filter(x => x.id !== id);
+      delete savedImages[id];
+      localStorage.setItem("dss_products", JSON.stringify(products));
+      localStorage.setItem("dss_images", JSON.stringify(savedImages));
+      renderCategories();
+      renderProducts();
+    }
+  }
 
-function renderProducts(){
-let term = search.value.toLowerCase();
-let selected = category.value;
+  // ছবির আপলোড ও পরিবর্তন (শুধুমাত্র অ্যাডমিন)
+  const imageFileInput = document.getElementById("imageFileInput");
+  function triggerImageUpload(id) {
+    if (!isAdmin) return;
+    currentUploadProductId = id;
+    imageFileInput.value = "";
+    imageFileInput.click();
+  }
 
-let filtered = products.filter(p =>
-(p.name.toLowerCase().includes(term) ||
-p.description.toLowerCase().includes(term)) &&
-(selected === "সব" || p.category === selected)
-);
+  imageFileInput.addEventListener("change", function(e) {
+    if (!isAdmin || !currentUploadProductId) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-document.getElementById("empty").hidden = filtered.length > 0;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        const maxWidth = 600;
+        const scale = maxWidth / img.width;
+        canvas.width = maxWidth;
+        canvas.height = img.height * scale;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-list.innerHTML = filtered.map(p => {
-let imgSrc = savedImages[p.id] ? savedImages[p.id] : p.image;
-let placeholderText = isAdmin ? "📷 ছবি আপলোড করুন" : "Upload Product Photo";
-let fallbackSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e9efeb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23667085%22 font-size=%2222%22%3E${encodeURIComponent(placeholderText)}%3C/text%3E%3C/svg%3E`;
+        savedImages[currentUploadProductId] = canvas.toDataURL("image/jpeg", 0.82);
+        localStorage.setItem("dss_images", JSON.stringify(savedImages));
+        renderProducts();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
 
-return `
-<div class="product">
-<div class="img-wrap ${isAdmin ? 'admin-active' : ''}" onclick="triggerUpload(${p.id})">
-<img src="${imgSrc || fallbackSvg}" alt="${p.name}"
-onerror="this.onerror=null;this.src='${fallbackSvg}'">
-${isAdmin ? '<span class="admin-upload-badge">📷 ছবি পরিবর্তন</span>' : ''}
-</div>
-<div class="info">
-<span class="tag">${p.category}</span>
-<h3>${p.name}</h3>
-<p>${p.description}</p>
-<div class="price-row">
-<span class="price">৳${taka(p.price)}</span>
-${isAdmin ? `
-<div class="admin-actions">
-<button class="admin-edit-btn" onclick="editProduct(${p.id})">এডিট</button>
-<button class="admin-del-btn" onclick="deleteProduct(${p.id})">ডিলিট</button>
-</div>
-` : ''}
-</div>
-<button class="add" onclick="add(${p.id})">
-কার্টে যোগ করুন +
-</button>
-</div>
-</div>
-`;
-}).join("");
-}
+  // ক্যাটাগরি ও পণ্য রেন্ডার
+  function renderCategories() {
+    const cats = ["সব", ...new Set(products.map(p => p.category))];
+    if (!cats.includes(selectedCategory)) selectedCategory = "সব";
 
-function add(id){
-let p = products.find(x => x.id === id);
-let item = cart.find(x => x.id === id);
-if(item) item.qty++;
-else cart.push({...p, qty: 1});
-renderCart();
-}
+    document.getElementById("categoryList").innerHTML = cats.map(c => `
+      <button class="cat-pill ${selectedCategory === c ? 'active' : ''}" onclick="selectCategory('${c}')">
+        ${c}
+      </button>
+    `).join("");
+  }
 
-function change(id, n){
-let item = cart.find(x => x.id === id);
-if(!item) return;
-item.qty += n;
-if(item.qty <= 0) cart = cart.filter(x => x.id !== id);
-renderCart();
-}
+  function selectCategory(cat) {
+    selectedCategory = cat;
+    renderCategories();
+    renderProducts();
+  }
 
-function renderCart(){
-let count = cart.reduce((s, x) => s + x.qty, 0);
-let total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  document.getElementById("searchInput").addEventListener("input", renderProducts);
 
-document.getElementById("count").textContent = taka(count);
-document.getElementById("total").textContent = "মোট: ৳" + taka(total);
+  function formatTaka(num) {
+    return Number(num).toLocaleString("bn-BD");
+  }
 
-if(!cart.length){
-document.getElementById("cartItems").textContent = "কার্ট খালি রয়েছে।";
-return;
-}
+  function renderProducts() {
+    const term = document.getElementById("searchInput").value.toLowerCase().trim();
+    const filtered = products.filter(p => {
+      const matchSearch = p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term);
+      const matchCat = selectedCategory === "সব" || p.category === selectedCategory;
+      return matchSearch && matchCat;
+    });
 
-document.getElementById("cartItems").innerHTML = cart.map(x => `
-<div class="cart-row">
-<div>
-<strong>${x.name}</strong><br>
-৳${taka(x.price)} × ${taka(x.qty)}
-</div>
-<div class="qty">
-<button onclick="change(${x.id},-1)">−</button>
-<strong>${taka(x.qty)}</strong>
-<button onclick="change(${x.id},1)">+</button>
-</div>
-</div>
-`).join("");
-}
+    document.getElementById("productCountText").textContent = `মোট ${formatTaka(filtered.length)}টি পণ্য`;
+    document.getElementById("emptyMsg").style.display = filtered.length === 0 ? "block" : "none";
 
-function checkout(){
-if(!cart.length){
-alert("প্রথমে কার্টে পণ্য যোগ করুন।");
-return;
-}
+    document.getElementById("productGrid").innerHTML = filtered.map(p => {
+      const imgSrc = savedImages[p.id] || p.image;
+      const placeholderText = isAdmin ? "📷 ছবি আপলোড করতে ক্লিক করুন" : "Dream S Shop";
+      const fallbackSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f1f5f9'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2364748b' font-size='16' font-family='sans-serif'%3E${encodeURIComponent(placeholderText)}%3C/text%3E%3C/svg%3E`;
 
-let total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-let lines = cart.map(x => `${x.name} × ${x.qty} = ৳${x.price * x.qty}`);
+      return `
+        <div class="product-card">
+          <div class="img-box ${isAdmin ? 'editable' : ''}" onclick="triggerImageUpload(${p.id})">
+            <img src="${imgSrc || fallbackSvg}" alt="${p.name}" onerror="this.src='${fallbackSvg}'">
+            ${isAdmin ? '<span class="change-photo-tag">📷 ছবি পাল্টান</span>' : ''}
+          </div>
+          <div class="card-body">
+            <span class="card-cat">${p.category}</span>
+            <h3 class="card-title">${p.name}</h3>
+            <p class="card-desc">${p.description || ''}</p>
+            <div class="card-price">৳${formatTaka(p.price)}</div>
+            <div class="card-actions">
+              <button class="btn-cart" onclick="addToCart(${p.id})">কার্টে যোগ করুন</button>
+              ${isAdmin ? `
+                <div class="admin-card-tools">
+                  <button class="btn-edit" onclick="openProductModal(${p.id})">✏️ এডিট</button>
+                  <button class="btn-del" onclick="deleteProduct(${p.id})">🗑️ ডিলিট</button>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
-let message =
-"আমি Dream S Shop থেকে অর্ডার করতে চাই:\n" +
-lines.join("\n") +
-"\nমোট: ৳" + total +
-"\nনাম:\nঠিকানা:\nফোন:";
+  // শপিং কার্ট ও অর্ডার সিস্টেম (গ্রাহকদের জন্য)
+  function toggleCart(show) {
+    document.getElementById("cartOverlay").style.display = show ? "flex" : "none";
+  }
 
-window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message), "_blank");
-}
+  function addToCart(id) {
+    const prod = products.find(x => x.id === id);
+    if (!prod) return;
+    const existing = cart.find(x => x.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...prod, qty: 1 });
+    renderCart();
+    toggleCart(true);
+  }
 
-search.addEventListener("input", renderProducts);
-category.addEventListener("change", renderProducts);
+  function updateQty(id, delta) {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
+    renderCart();
+  }
 
-document.getElementById("year").textContent = new Date().getFullYear();
+  function renderCart() {
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-updateCategories();
-updateAdminState();
-renderCart();
+    document.getElementById("cartCount").textContent = formatTaka(count);
+    document.getElementById("cartTotal").textContent = "৳" + formatTaka(total);
+
+    const container = document.getElementById("cartItemsContainer");
+    if (cart.length === 0) {
+      container.innerHTML = `<p style="text-align:center; color:#757575; margin-top:40px;">আপনার কার্ট বর্তমানে খালি।</p>`;
+      return;
+    }
+
+    container.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div>
+          <strong style="font-size:14px;">${item.name}</strong><br>
+          <span style="font-size:13px; color:var(--primary); font-weight:700;">৳${formatTaka(item.price)} × ${formatTaka(item.qty)}</span>
+        </div>
+        <div class="qty-box">
+          <button onclick="updateQty(${item.id}, -1)">−</button>
+          <strong>${formatTaka(item.qty)}</strong>
+          <button onclick="updateQty(${item.id}, 1)">+</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function orderViaWhatsApp() {
+    if (cart.length === 0) {
+      alert("অর্ডার করার জন্য প্রথমে কার্টে পণ্য যোগ করুন।");
+      return;
+    }
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const itemLines = cart.map(item => `• ${item.name} (${item.qty}টি) = ৳${item.price * item.qty}`).join("\n");
+
+    const message = `আসসালামু আলাইকুম, আমি Dream S Shop থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n${itemLines}\n\nসর্বমোট বিল: ৳${total}\n\nআমার নাম:\nঠিকানা:\nমোবাইল নম্বর:`;
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+  }
+
+  // Modal Helpers
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
 </script>
 
 </body>
-<
+</html>
+
+
 
