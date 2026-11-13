@@ -107,11 +107,39 @@ transition:.25s
 transform:translateY(-6px);
 box-shadow:0 15px 35px #00000012
 }
-.product img{
-width:100%;height:240px;
-object-fit:cover;background:#e9efeb;
-display:block
+.img-wrap{
+position:relative;
+width:100%;
+height:240px;
+background:#e9efeb;
+overflow:hidden;
 }
+.product img{
+width:100%;height:100%;
+object-fit:cover;
+display:block;
+}
+/* Admin Upload Overlay */
+.admin-upload-badge{
+position:absolute;
+bottom:10px;
+right:10px;
+background:rgba(16, 27, 23, 0.85);
+color:#fff;
+padding:6px 12px;
+border-radius:8px;
+font-size:12px;
+font-weight:bold;
+pointer-events:none;
+border:1px solid var(--gold);
+}
+.img-wrap.admin-active{
+cursor:pointer;
+}
+.img-wrap.admin-active:hover{
+opacity:0.9;
+}
+
 .info{padding:18px}
 .tag{color:var(--green);font-size:13px;font-weight:bold}
 .info h3{margin:8px 0}
@@ -176,6 +204,21 @@ background:#0b1511;color:#c8d4cd;
 padding:28px 10px;text-align:center;margin-top:45px
 }
 footer strong{color:var(--gold)}
+.admin-btn{
+margin-top:15px;
+background:transparent;
+border:1px solid #35473f;
+color:#9cb0a5;
+padding:6px 14px;
+border-radius:20px;
+font-size:12px;
+}
+.admin-btn.active{
+background:var(--gold);
+color:#101b17;
+border-color:var(--gold);
+font-weight:bold;
+}
 
 @media(max-width:750px){
 .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -183,11 +226,11 @@ footer strong{color:var(--gold)}
 .links{gap:12px;font-size:13px}
 .nav{flex-wrap:wrap;padding:13px 0}
 .hero{padding:55px 0}
-.product img{height:190px}
+.img-wrap{height:190px}
 }
 @media(max-width:480px){
 .products{grid-template-columns:1fr}
-.product img{height:240px}
+.img-wrap{height:240px}
 .filters{flex-direction:column}
 .cart-bottom{flex-direction:column;align-items:stretch}
 .order{width:100%}
@@ -302,13 +345,23 @@ WhatsApp Message
 
 </main>
 
+<!-- ছবি আপলোডের গোপন ইনপুট -->
+<input type="file" id="photoUploader" accept="image/*" hidden>
+
 <footer>
 <strong>DREAM S SHOP</strong>
 <p>© <span id="year"></span> All Rights Reserved.</p>
 <p>আপনার বিশ্বস্ত অনলাইন শপ</p>
+<button id="adminToggle" class="admin-btn" onclick="toggleAdmin()">🔒 Admin Login</button>
 </footer>
 
 <script>
+const ADMIN_PASS = "1234"; // অ্যাডমিন পাসওয়ার্ড
+let isAdmin = localStorage.getItem("dream_shop_admin") === "true";
+let currentUploadId = null;
+
+let savedImages = JSON.parse(localStorage.getItem("dream_shop_images") || "{}");
+
 const products=[
 {
 id:1,
@@ -342,6 +395,71 @@ let cart=[];
 const list=document.getElementById("productList");
 const search=document.getElementById("search");
 const category=document.getElementById("category");
+const photoUploader=document.getElementById("photoUploader");
+const adminToggle=document.getElementById("adminToggle");
+
+function updateAdminUI(){
+if(isAdmin){
+adminToggle.textContent = "🔓 Admin Mode (চালু আছে)";
+adminToggle.classList.add("active");
+} else {
+adminToggle.textContent = "🔒 Admin Login";
+adminToggle.classList.remove("active");
+}
+renderProducts();
+}
+
+function toggleAdmin(){
+if(isAdmin){
+isAdmin = false;
+localStorage.setItem("dream_shop_admin", "false");
+alert("Admin Mode বন্ধ করা হয়েছে।");
+updateAdminUI();
+} else {
+let pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন (1234):");
+if(pass === ADMIN_PASS){
+isAdmin = true;
+localStorage.setItem("dream_shop_admin", "true");
+alert("স্বাগতম! এখন পণ্যের ছবিতে ক্লিক করে ছবি আপলোড করতে পারবেন।");
+updateAdminUI();
+} else if(pass !== null){
+alert("ভুল পাসওয়ার্ড!");
+}
+}
+}
+
+function triggerUpload(id){
+if(!isAdmin) return;
+currentUploadId = id;
+photoUploader.value = "";
+photoUploader.click();
+}
+
+photoUploader.addEventListener("change", function(e){
+const file = e.target.files[0];
+if(!file || !currentUploadId) return;
+
+const reader = new FileReader();
+reader.onload = function(event){
+const img = new Image();
+img.onload = function(){
+const canvas = document.createElement("canvas");
+const maxW = 600;
+const scale = maxW / img.width;
+canvas.width = maxW;
+canvas.height = img.height * scale;
+const ctx = canvas.getContext("2d");
+ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+savedImages[currentUploadId] = compressedDataUrl;
+localStorage.setItem("dream_shop_images", JSON.stringify(savedImages));
+renderProducts();
+};
+img.src = event.target.result;
+};
+reader.readAsDataURL(file);
+});
 
 function taka(n){
 return Number(n).toLocaleString("bn-BD");
@@ -359,10 +477,18 @@ p.description.toLowerCase().includes(term))&&
 
 document.getElementById("empty").hidden=filtered.length>0;
 
-list.innerHTML=filtered.map(p=>`
+list.innerHTML=filtered.map(p=>{
+let imgSrc = savedImages[p.id] ? savedImages[p.id] : p.image;
+let placeholderText = isAdmin ? "📷 ছবি আপলোড করতে ক্লিক করুন" : "Upload Product Photo";
+let fallbackSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e9efeb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23667085%22 font-size=%2222%22%3E${encodeURIComponent(placeholderText)}%3C/text%3E%3C/svg%3E`;
+
+return `
 <div class="product">
-<img src="${p.image}" alt="${p.name}"
-onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e9efeb%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23667085%22 font-size=%2224%22%3EUpload Product Photo%3C/text%3E%3C/svg%3E'">
+<div class="img-wrap ${isAdmin ? 'admin-active' : ''}" onclick="triggerUpload(${p.id})">
+<img src="${imgSrc}" alt="${p.name}"
+onerror="this.onerror=null;this.src='${fallbackSvg}'">
+${isAdmin ? '<span class="admin-upload-badge">📷 ছবি পরিবর্তন</span>' : ''}
+</div>
 <div class="info">
 <span class="tag">${p.category}</span>
 <h3>${p.name}</h3>
@@ -373,7 +499,8 @@ onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xml
 </button>
 </div>
 </div>
-`).join("");
+`;
+}).join("");
 }
 
 function add(id){
@@ -454,12 +581,12 @@ category.innerHTML=
 document.getElementById("year").textContent=
 new Date().getFullYear();
 
-renderProducts();
+updateAdminUI();
 renderCart();
 </script>
 
+<!-- Supabase Script -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const supabaseClient = window.supabase.createClient(
   "https://yxrluknlfqqyianfvarm.supabase.co",
@@ -468,6 +595,4 @@ const supabaseClient = window.supabase.createClient(
 </script>
 
 </body>
-</
-
-
+</html>
