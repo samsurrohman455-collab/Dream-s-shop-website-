@@ -1,5 +1,6 @@
 
 
+
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
@@ -1173,17 +1174,4 @@
       alert("অর্ডার করার জন্য প্রথমে কার্টে পণ্য যোগ করুন।");
       return;
     }
-    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const itemLines = cart.map(item => `• ${item.name} (${item.qty}টি) = ৳${item.price * item.qty}`).join("\n");
-
-    const message = `আসসালামু আলাইকুম, আমি Dream S Shop থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n${itemLines}\n\nসর্বমোট বিল: ৳${total}\n\nআমার নাম:\nঠিকানা:\nমোবাইল নম্বর:`;
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-  }
-
-  // Modal Helpers
-  function openModal(id) {
-    document.getElementById(id).style.display = "flex";
-  }
-
-
+    const
